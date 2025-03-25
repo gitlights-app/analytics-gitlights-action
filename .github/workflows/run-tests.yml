@@ -1,0 +1,45 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Python Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Build Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false
+        load: true
+        tags: gitlights-action:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        
+    - name: Run tests
+      run: |
+        docker run --entrypoint="" -v $(pwd):/app gitlights-action:test python -m pytest -v
+        
+    # Removed the problematic upload-artifact action
+      
+    - name: Notify on success
+      if: success()
+      run: echo "All tests passed successfully!"
+      
+    - name: Notify on failure
+      if: failure()
+      run: echo "Tests failed. Please check the logs for details."

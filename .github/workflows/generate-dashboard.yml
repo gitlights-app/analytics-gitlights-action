@@ -1,0 +1,54 @@
+name: Generate GitLights Dashboard
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-dashboard:
+    runs-on: ubuntu-latest
+    name: Generate Dashboard
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Generate GitLights dashboard
+        id: gitlights
+        uses: gitlights-app/analytics-gitlights-action@1.0.13
+        with:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          run_id: ${{ github.run_id }}
+        
+      - name: Notify on success
+        if: success()
+        run: |
+          echo "GitLights dashboard generated successfully!"
+          echo "Dashboard URL available in artifact"
+      
+      # Create a text file with the dashboard URL and save it as an artifact
+      - name: Save Dashboard URL to File
+        if: success()
+        run: |
+          # Create output directory if it doesn't exist
+          mkdir -p ./artifacts
+          # Save the URL to a file in the artifacts directory
+          echo "${{ steps.gitlights.outputs.image_url }}" > ./artifacts/dashboard_url.txt
+          # Verify file was created successfully
+          ls -la ./artifacts/
+          echo "Dashboard URL saved to ./artifacts/dashboard_url.txt"
+      
+      # Upload only the URL text file as an artifact
+      - name: Upload Dashboard URL
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitlights-dashboard-url
+          path: ./artifacts/dashboard_url.txt
+          retention-days: 5
+          if-no-files-found: error
+        
+      - name: Notify on failure
+        if: failure()
+        run: echo "Dashboard generation failed. Please check the logs for more details."
