@@ -1,0 +1,35 @@
+name: 'GitLights Dashboard Generator'
+description: 'Generates a dashboard image with GitLights data'
+author: 'GitLights'
+
+inputs:
+  owner:
+    description: 'Repository owner (organization or user)'
+    required: false
+  repo:
+    description: 'Repository name'
+    required: false
+  run_id:
+    description: 'GitHub Actions workflow run ID'
+    required: false
+  output_path:
+    description: 'Path where the final dashboard image will be saved'
+    required: false
+    default: 'images/all_in_one.png'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+
+
+outputs:
+  dashboard_image:
+    description: 'Path to the generated dashboard image'
+  image_url:
+    description: 'URL to the uploaded dashboard image (requires authentication)'
+  redirect_html:
+    description: 'Path to an HTML file that redirects to the dashboard image URL'
+
+branding:
+  icon: 'bar-chart-2'
+  color: 'blue'
