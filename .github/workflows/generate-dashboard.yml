@@ -15,7 +15,7 @@ jobs:
         
       - name: Generate GitLights dashboard
         id: gitlights
-        uses: gitlights-app/analytics-gitlights-action@1.1.0
+        uses: gitlights-app/analytics-gitlights-action@1.1.1
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}

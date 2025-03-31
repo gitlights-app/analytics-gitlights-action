@@ -11,6 +11,13 @@ from main import generate_dashboard, main
 
 class TestMain(unittest.TestCase):
     """Test cases for the main.py module."""
+    
+    def setUp(self):
+        """Set up test environment before each test."""
+        # Create test directory for images
+        self.test_img_dir = "tests/images"
+        if not os.path.exists(self.test_img_dir):
+            os.makedirs(self.test_img_dir)
 
     @patch('main.os.makedirs')
     @patch('main.requests.get')
@@ -62,12 +69,8 @@ class TestMain(unittest.TestCase):
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
         
-        # Create test directory for images
-        test_img_dir = "tests/images"
-        if not os.path.exists(test_img_dir):
-            os.makedirs(test_img_dir)
-            
-        output_path = f"{test_img_dir}/test_dashboard.png"
+        # Use the test image directory created in setUp
+        output_path = f"{self.test_img_dir}/test_dashboard.png"
         
         # Make the original create_*_figure functions accessible in the patched context
         # using a context manager to apply patches only within this block
@@ -103,7 +106,7 @@ class TestMain(unittest.TestCase):
             self.assertTrue(os.path.exists("images/ranking.png"))
             self.assertTrue(os.path.exists(output_path))
             
-            print(f"\nImages generated in {test_img_dir}/")
+            print(f"\nImages generated in {self.test_img_dir}/")
             
             # Return the path for cleanup if needed in tearDown
             return output_path
