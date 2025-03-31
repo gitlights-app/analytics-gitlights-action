@@ -10,7 +10,7 @@ from config import (
     DASHBOARD_WIDTH, DASHBOARD_HEIGHT, DASHBOARD_BACKGROUND_COLOR,
     WATERMARK_FONT_SIZE, WATERMARK_FONT_FAMILY, WATERMARK_TEXT_COLOR,
     WATERMARK_POSITION_OFFSET_X, WATERMARK_POSITION_OFFSET_Y,
-    GITLIGHTS_LOGO_URL, LOGO_MAX_SIZE, LOGO_MARGIN
+    GITLIGHTS_LOGO_URL, LOGO_MAX_SIZE, LOGO_POSITION_X, LOGO_POSITION_Y
 )
 
 def encode_image_from_url(url):
@@ -78,8 +78,8 @@ def combine_dashboard_images(indicators_path, bar_path, pie_path, ranking_path,
         logo = Image.open(BytesIO(resp.content)).convert("RGBA")
         logo.thumbnail(LOGO_MAX_SIZE, Image.Resampling.LANCZOS)
 
-        # Paste the logo with a defined margin
-        dashboard_img.paste(logo, (LOGO_MARGIN, final_height - logo.height - LOGO_MARGIN), logo)
+        # Paste the logo at the fixed position
+        dashboard_img.paste(logo, (LOGO_POSITION_X, LOGO_POSITION_Y), logo)
     except Exception as e:
         print(f"Error downloading or pasting the Gitlights logo: {e}")
 

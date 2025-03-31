@@ -21,7 +21,8 @@ class TestMain(unittest.TestCase):
 
     @patch('main.os.makedirs')
     @patch('main.requests.get')
-    def test_generate_dashboard_success(self, mock_get, mock_makedirs):
+    @patch('main.requests.post')
+    def test_generate_dashboard_success(self, mock_post, mock_get, mock_makedirs):
         """Test successful dashboard generation with real image generation."""
         import os
         from charts import (
@@ -33,8 +34,8 @@ class TestMain(unittest.TestCase):
         from image_utils import combine_dashboard_images
         
         # Setup mock response based on provided sample
-        mock_response = MagicMock()
-        mock_response.json.return_value = {
+        mock_get_response = MagicMock()
+        mock_get_response.json.return_value = {
             "indicators": {
                 "titles": ["Commits", "PRs", "Comments", "Reviews"],
                 "values": [165, 54, 14, 53],
@@ -66,8 +67,14 @@ class TestMain(unittest.TestCase):
             },
             "watermark_text": "Powered by Gitlights"
         }
-        mock_response.raise_for_status.return_value = None
-        mock_get.return_value = mock_response
+        mock_get_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_get_response
+        
+        # Mock the backend POST request with a 200 status code
+        mock_post_response = MagicMock()
+        mock_post_response.status_code = 200
+        mock_post_response.json.return_value = {"image_url": "https://example.com/image.png"}
+        mock_post.return_value = mock_post_response
         
         # Use the test image directory created in setUp
         output_path = f"{self.test_img_dir}/test_dashboard.png"
@@ -188,6 +195,65 @@ class TestMain(unittest.TestCase):
             
             # Assertions
             mock_exit.assert_called_once_with(1)
+            
+    @patch('main.requests.post')
+    def test_generate_dashboard_backend_non_200(self, mock_post):
+        """Test dashboard generation when backend request returns non-200 status code."""
+        # First mock the initial API call to succeed
+        with patch('main.requests.get') as mock_get:
+            # Setup mock response for the initial API call
+            mock_response_get = MagicMock()
+            mock_response_get.json.return_value = {
+                "indicators": {
+                    "titles": ["Commits", "PRs", "Comments", "Reviews"],
+                    "values": [165, 54, 14, 53],
+                    "deltas": [0.3, 0.3, 0.8, 0.4]
+                },
+                "bar_chart": {
+                    "title": "Daily Activity",
+                    "months": ["2025-03-03", "2025-03-04"],
+                    "commits": [5, 7],
+                    "prs": [3, 2],
+                    "comments": [0, 0],
+                    "reviews": [3, 2]
+                },
+                "pie_chart": {
+                    "title": "Investment Balance",
+                    "labels": ["Unknown", "fixes"],
+                    "values": [89, 40]
+                },
+                "ranking": {
+                    "title": "Top Contributors",
+                    "devs": [
+                        {"name": "User A", "avatar": "http://example.com/avatar1.png", 
+                         "commits": 77, "prs": 25, "comments": 9, "reviews": 6}
+                    ]
+                },
+                "watermark_text": "Powered by GitLights"
+            }
+            mock_response_get.raise_for_status.return_value = None
+            mock_get.return_value = mock_response_get
+            
+            # Setup mock for backend request to return a non-200 status code
+            mock_response_post = MagicMock()
+            mock_response_post.status_code = 404  # Non-200 status code
+            mock_post.return_value = mock_response_post
+            
+            # Mock the file operations
+            with patch('builtins.open', mock_open(read_data=b'test_data')), \
+                 patch('main.os.path.basename', return_value='test_image.png'), \
+                 patch('main.combine_dashboard_images', return_value=None), \
+                 patch('plotly.graph_objects.Figure.write_image', return_value=None):
+                
+                # Call the function
+                result = generate_dashboard(
+                    actions_runtime_token="test_token",
+                    owner="test_owner",
+                    repo="test_repo"
+                )
+                
+                # Assertions
+                self.assertFalse(result)  # Should fail when backend returns non-200
 
 
 if __name__ == '__main__':

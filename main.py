@@ -128,7 +128,13 @@ def generate_dashboard(owner=None, repo=None, run_id=None, output_path="images/a
                 
                 # Send the request
                 response = requests.post(backend_url, files=files, data=payload, headers=headers)
-                response.raise_for_status()
+                
+                # Check for any non-200 status code
+                if response.status_code != 200:
+                    error_msg = f"Backend request failed with status code: {response.status_code}"
+                    print(error_msg)
+                    # Fail the whole process when backend returns non-200 status
+                    return False
                 
                 # Get the image URL from the response
                 image_url = response.json().get('image_url')
@@ -156,8 +162,8 @@ def generate_dashboard(owner=None, repo=None, run_id=None, output_path="images/a
                     
         except Exception as e:
             print(f"Error uploading dashboard to backend: {e}")
-            # Don't fail the whole process if just the upload fails
-            # The image is still generated locally
+            # Fail the process when backend requests fail
+            return False
         
         return True
     except Exception as e:

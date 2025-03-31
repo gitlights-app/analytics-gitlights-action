@@ -37,17 +37,17 @@ RANKING_WIDTH = 1200
 RANKING_HEIGHT = 800
 RANKING_TITLE_FONT_SIZE = 28
 RANKING_TITLE_FONT_COLOR = "black"
-RANKING_HEADER_FONT_SIZE = 26
+RANKING_HEADER_FONT_SIZE = 22
 RANKING_HEADER_FONT_COLOR = "black"
 RANKING_CELL_FONT_SIZE = 22
 RANKING_CELL_FONT_COLOR = "black"
 RANKING_AXIS_RANGE = [0, 1]
 RANKING_COLUMN_POSITIONS = {
     "dev":           0.15,  # Developer = avatar + name
-    "commits":       0.40,
-    "prs":           0.52,
-    "issues":        0.64,
-    "reviews":       0.76
+    "commits":       0.42,
+    "prs":           0.58,
+    "issues":        0.74,
+    "reviews":       0.90
 }
 RANKING_HEADERS = ["Developer", "Commits", "PR", "Comments", "Reviews"]
 RANKING_MEDAL_COLORS = ["#FFD700", "#C0C0C0", "#CD7F32"]  # Gold, Silver, Bronze
@@ -71,7 +71,8 @@ WATERMARK_POSITION_OFFSET_Y = 40
 
 GITLIGHTS_LOGO_URL = "https://avatars.githubusercontent.com/ml/16163?s=400&v=4"
 LOGO_MAX_SIZE = (75, 75)
-LOGO_MARGIN = 10
+LOGO_POSITION_X = 20
+LOGO_POSITION_Y = 20
 
 # API configuration
 API_URL = "https://api.gitlights.com/api/gitlights-action/get-main-dashboard-data/"
