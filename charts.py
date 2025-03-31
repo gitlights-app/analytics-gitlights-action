@@ -85,7 +85,7 @@ def create_indicators_figure(titles, values, deltas):
 def create_bar_figure(cfg_bar):
     """
     Creates a stacked bar chart.
-    cfg_bar is a dictionary with keys: "title", "months", "commits", "prs", "issues".
+    cfg_bar is a dictionary with keys: "title", "months", "commits", "prs", "comments", "reviews".
 
     Args:
         cfg_bar (dict): Parameters for the bar chart. Must contain:
@@ -93,7 +93,8 @@ def create_bar_figure(cfg_bar):
             - months (list): List of months (X axis)
             - commits (list): Commit data
             - prs (list): PR data
-            - issues (list): Issue data
+            - comments (list): Comments data
+            - reviews (list): Reviews data
 
     Returns:
         plotly.graph_objs._figure.Figure: Stacked bar chart figure.
@@ -113,10 +114,16 @@ def create_bar_figure(cfg_bar):
         marker_color=BAR_COLOR_PRS
     ))
     fig_bar.add_trace(go.Bar(
-        name="Issues",
+        name="Comments",
         x=cfg_bar["months"],
-        y=cfg_bar["issues"],
+        y=cfg_bar["comments"],
         marker_color=BAR_COLOR_ISSUES
+    ))
+    fig_bar.add_trace(go.Bar(
+        name="Reviews",
+        x=cfg_bar["months"],
+        y=cfg_bar["reviews"],
+        marker_color="#6a329f"  # Using a purple color for reviews
     ))
 
     fig_bar.update_layout(
@@ -241,10 +248,8 @@ def create_ranking_figure(cfg_rank):
             x_pos = col_positions["prs"]
         elif i == 3:
             x_pos = col_positions["issues"]
-        elif i == 4:
-            x_pos = col_positions["reviews"]
         else:
-            x_pos = col_positions["contributions"]
+            x_pos = col_positions["reviews"]
 
         fig_rank.add_annotation(
             x=x_pos,
@@ -304,11 +309,11 @@ def create_ranking_figure(cfg_rank):
             font=dict(color=RANKING_CELL_FONT_COLOR, size=RANKING_CELL_FONT_SIZE)
         )
 
-        # Issues
+        # Comments
         fig_rank.add_annotation(
             x=col_positions["issues"],
             y=y_pos,
-            text=str(dev["issues"]),
+            text=str(dev["comments"]),
             xref="x", yref="y",
             showarrow=False,
             font=dict(color=RANKING_CELL_FONT_COLOR, size=RANKING_CELL_FONT_SIZE)
@@ -319,16 +324,6 @@ def create_ranking_figure(cfg_rank):
             x=col_positions["reviews"],
             y=y_pos,
             text=str(dev["reviews"]),
-            xref="x", yref="y",
-            showarrow=False,
-            font=dict(color=RANKING_CELL_FONT_COLOR, size=RANKING_CELL_FONT_SIZE)
-        )
-
-        # Total contributions
-        fig_rank.add_annotation(
-            x=col_positions["contributions"],
-            y=y_pos,
-            text=str(dev["contributions"]),
             xref="x", yref="y",
             showarrow=False,
             font=dict(color=RANKING_CELL_FONT_COLOR, size=RANKING_CELL_FONT_SIZE)

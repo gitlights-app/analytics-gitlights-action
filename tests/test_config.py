@@ -44,7 +44,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(config.RANKING_HEIGHT, 800)
         self.assertEqual(config.RANKING_TITLE_FONT_SIZE, 28)
         self.assertEqual(config.RANKING_AXIS_RANGE, [0, 1])
-        self.assertEqual(len(config.RANKING_HEADERS), 6)
+        self.assertEqual(len(config.RANKING_HEADERS), 5)
         self.assertEqual(config.RANKING_HEADERS[0], "Developer")
         self.assertEqual(len(config.RANKING_MEDAL_COLORS), 3)
 

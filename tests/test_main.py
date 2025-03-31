@@ -25,38 +25,39 @@ class TestMain(unittest.TestCase):
         )
         from image_utils import combine_dashboard_images
         
-        # Setup mock response
+        # Setup mock response based on provided sample
         mock_response = MagicMock()
         mock_response.json.return_value = {
             "indicators": {
-                "titles": ["Indicator 1", "Indicator 2", "Indicator 3", "Indicator 4"],
-                "values": [100, 200, 300, 400],
-                "deltas": [0.05, -0.1, 0.2, 0]
+                "titles": ["Commits", "PRs", "Comments", "Reviews"],
+                "values": [165, 54, 14, 53],
+                "deltas": [0.3, 0.3, 0.8, 0.4]
             },
             "bar_chart": {
-                "title": "Monthly Activity",
-                "months": ["Jan", "Feb", "Mar"],
-                "commits": [10, 20, 30],
-                "prs": [5, 10, 15],
-                "issues": [3, 6, 9]
+                "title": "Daily Activity (Last 30 days)",
+                "months": ["2025-03-03", "2025-03-04", "2025-03-05", "2025-03-06", "2025-03-07"],
+                "commits": [5, 7, 2, 7, 20],
+                "prs": [3, 2, 0, 2, 6],
+                "comments": [0, 0, 0, 2, 0],
+                "reviews": [3, 2, 0, 1, 7]
             },
             "pie_chart": {
-                "title": "Contribution Distribution",
-                "labels": ["User A", "User B", "User C"],
-                "values": [50, 30, 20]
+                "title": "Investment Balance (Last 30 days)",
+                "labels": ["Unknown", "fixes_and_maintenance", "new_development", "refactoring", "upgrades", "testing_and_qa"],
+                "values": [89, 40, 16, 11, 6, 3]
             },
             "ranking": {
-                "title": "Top Contributors",
+                "title": "Top Contributors (Last 30 days)",
                 "devs": [
                     {"name": "User A", "avatar": "http://example.com/avatar1.png", 
-                     "commits": 50, "prs": 20, "issues": 10, "reviews": 30, "contributions": 100},
+                     "commits": 77, "prs": 25, "comments": 9, "reviews": 6},
                     {"name": "User B", "avatar": "http://example.com/avatar2.png", 
-                     "commits": 40, "prs": 15, "issues": 8, "reviews": 25, "contributions": 80},
+                     "commits": 49, "prs": 18, "comments": 0, "reviews": 11},
                     {"name": "User C", "avatar": "http://example.com/avatar3.png", 
-                     "commits": 30, "prs": 10, "issues": 5, "reviews": 20, "contributions": 60}
+                     "commits": 20, "prs": 6, "comments": 4, "reviews": 26}
                 ]
             },
-            "watermark_text": "Test Watermark"
+            "watermark_text": "Powered by Gitlights"
         }
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response

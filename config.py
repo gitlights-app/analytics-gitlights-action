@@ -47,10 +47,9 @@ RANKING_COLUMN_POSITIONS = {
     "commits":       0.40,
     "prs":           0.52,
     "issues":        0.64,
-    "reviews":       0.76,
-    "contributions": 0.88
+    "reviews":       0.76
 }
-RANKING_HEADERS = ["Developer", "Commits", "PR", "Issues", "Reviews", "Contributions"]
+RANKING_HEADERS = ["Developer", "Commits", "PR", "Comments", "Reviews"]
 RANKING_MEDAL_COLORS = ["#FFD700", "#C0C0C0", "#CD7F32"]  # Gold, Silver, Bronze
 RANKING_AVATAR_SIZE = 0.08
 

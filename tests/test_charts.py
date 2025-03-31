@@ -45,7 +45,8 @@ class TestCharts(unittest.TestCase):
             "months": ["Jan", "Feb", "Mar"],
             "commits": [10, 20, 30],
             "prs": [5, 10, 15],
-            "issues": [3, 6, 9]
+            "comments": [3, 6, 9],
+            "reviews": [4, 8, 12]
         }
         
         # Call the function
@@ -53,7 +54,7 @@ class TestCharts(unittest.TestCase):
         
         # Assertions
         self.assertIsNotNone(fig)
-        self.assertEqual(len(fig.data), 3)  # Should have 3 bar series (commits, PRs, issues)
+        self.assertEqual(len(fig.data), 4)  # Should have 4 bar series (commits, PRs, comments, reviews)
         
         # Check data for each series
         self.assertEqual(fig.data[0].name, "Commits")
@@ -64,9 +65,13 @@ class TestCharts(unittest.TestCase):
         self.assertEqual(list(fig.data[1].x), cfg_bar["months"])
         self.assertEqual(list(fig.data[1].y), cfg_bar["prs"])
         
-        self.assertEqual(fig.data[2].name, "Issues")
+        self.assertEqual(fig.data[2].name, "Comments")
         self.assertEqual(list(fig.data[2].x), cfg_bar["months"])
-        self.assertEqual(list(fig.data[2].y), cfg_bar["issues"])
+        self.assertEqual(list(fig.data[2].y), cfg_bar["comments"])
+        
+        self.assertEqual(fig.data[3].name, "Reviews")
+        self.assertEqual(list(fig.data[3].x), cfg_bar["months"])
+        self.assertEqual(list(fig.data[3].y), cfg_bar["reviews"])
         
         # Check title
         self.assertEqual(fig.layout.title.text, cfg_bar["title"])
@@ -110,18 +115,16 @@ class TestCharts(unittest.TestCase):
                     "avatar": "http://example.com/avatar1.png",
                     "commits": 50,
                     "prs": 20,
-                    "issues": 10,
-                    "reviews": 30,
-                    "contributions": 100
+                    "comments": 10,
+                    "reviews": 30
                 },
                 {
                     "name": "User B",
                     "avatar": "http://example.com/avatar2.png",
                     "commits": 40,
                     "prs": 15,
-                    "issues": 8,
-                    "reviews": 25,
-                    "contributions": 90
+                    "comments": 8,
+                    "reviews": 25
                 }
             ]
         }
@@ -138,7 +141,7 @@ class TestCharts(unittest.TestCase):
         annotations = list(fig.layout.annotations)
         
         # Check if headers are in annotations
-        for header in ["Developer", "Commits", "PR", "Issues", "Reviews", "Contributions"]:
+        for header in ["Developer", "Commits", "PR", "Comments", "Reviews"]:
             header_annotation = next((a for a in annotations if f"<b>{header}</b>" in a.text), None)
             self.assertIsNotNone(header_annotation, f"Header '{header}' not found in annotations")
         
@@ -148,7 +151,7 @@ class TestCharts(unittest.TestCase):
             self.assertIsNotNone(dev_annotation, f"Developer '{dev['name']}' not found in annotations")
             
             # Check if metrics are in annotations
-            metrics = ["commits", "prs", "issues", "reviews", "contributions"]
+            metrics = ["commits", "prs", "comments", "reviews"]
             for metric in metrics:
                 metric_value = str(dev[metric])
                 metric_annotation = next((a for a in annotations if a.text == metric_value), None)
