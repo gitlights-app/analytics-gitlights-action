@@ -1,4 +1,4 @@
-# 📊 GitLights GitHub Analytics Dashboard
+# 📊 GitHub Analytics Dashboard in your README
 
 Looking to embed real, auto-updated **GitHub Analytics** directly into your repository?
 
