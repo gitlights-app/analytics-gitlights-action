@@ -38,6 +38,8 @@ This dashboard turns raw GitHub data into **actionable GitHub Insights**, perfec
 
 ### 1. Add the GitHub Action
 
+First, create a file named `generate_gitlights_dashboard.yml` in the `.github/workflows` directory of your repository, then add the following code:
+
 ```yaml
 name: Generate GitHub Analytics Dashboard
 
@@ -73,9 +75,10 @@ After the first workflow run:
 
 1. Go to the **Actions** tab in your repo
 2. Open the latest run of the dashboard workflow
-3. Scroll to the **Artifacts** section
-4. Download the file named `dashboard_url.txt`
-5. Open the file and copy the image URL
+3. Navigate to the **Summary** tab of the workflow page
+4. Look for the **Artifacts** section at the bottom of the summary
+5. Download the file named `dashboard_url.txt`
+6. Open the file and copy the image URL
 
 ---
 
