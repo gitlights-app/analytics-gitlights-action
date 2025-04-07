@@ -1,5 +1,5 @@
-name: 'GitLights Dashboard Generator'
-description: 'Generates a dashboard image with GitLights data'
+name: 'GitHub Analytics Dashboard 📊 Visualize Repository Metrics'
+description: 'Transform your README with auto-updating analytics dashboards that showcase repository activity and team contributions'
 author: 'GitLights'
 
 inputs:
