@@ -2,7 +2,7 @@
 
 Looking to embed real, auto-updated **GitHub Analytics** directly into your repository?
 
-**GitLights** is a GitHub Action that automatically generates a **visual dashboard with GitHub Insights** based on your repository's activity over the **last 30 days**. The dashboard includes key metrics, activity trends, contribution breakdowns, and contributor rankings — all as a single image you can display in your `README.md` or documentation.
+**GitLights** is a GitHub Action that automatically generates a **visual dashboard with GitHub Insights** based on your repository's activity. The dashboard includes key metrics, activity trends, contribution breakdowns, and contributor rankings — all as a single image you can display in your `README.md` or documentation.
 
 This is the easiest way to make your GitHub repository more transparent, measurable, and engaging — without any manual setup.
 
@@ -14,7 +14,7 @@ This is the easiest way to make your GitHub repository more transparent, measura
 
 ## 📈 What's included in the dashboard?
 
-All data reflects activity from the **past month only** (not the full history), giving you a fresh and focused overview.
+All data reflects the activity available in your GitLights account for this repository, giving you a fresh and focused overview.
 
 - **4 key GitHub KPIs**:
   - Total commits
@@ -87,13 +87,14 @@ After the first workflow run:
 Paste this line into your `README.md` (replace the URL with your own):
 
 ```markdown
-## GitHub Analytics Dashboard (last 30 days)
-![GitLights Dashboard](https://api.gitlights.com/api/gitlights-action/dashboard-image/your_image_id)
+## GitHub Analytics Dashboard
+<img src="https://api.gitlights.com/api/gitlights-action/dashboard-image/your_image_id" alt="GitLights Analytics Dashboard" width="500" />
 ```
 
 ✅ **You only do this once**  
 🔁 The URL never changes, even though the image gets updated automatically on each commit  
 📊 Your README will always display the latest **GitHub Analytics dashboard** — no manual updates needed
+📏 You can adjust the `width` attribute according to your preference or requirements
 
 ---
 
