@@ -38,10 +38,10 @@ This dashboard turns raw GitHub data into **actionable GitHub Insights**, perfec
 
 ### 1. Add the GitHub Action
 
-First, create a file named `generate_gitlights_dashboard.yml` in the `.github/workflows` directory of your repository, then add the following code:
+First, create a file named `generate-dashboard.yml` in the `.github/workflows` directory of your repository, then add the following code:
 
 ```yaml
-name: Generate GitHub Analytics Dashboard
+name: Generate GitLights Dashboard
 
 on:
   push:
@@ -52,19 +52,33 @@ on:
 jobs:
   generate-dashboard:
     runs-on: ubuntu-latest
+    name: Generate Dashboard
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Generate GitHub Analytics Dashboard
-        uses: gitlights-app/analytics-gitlights-action@v1
-
-      - name: Upload Dashboard Artifacts
-        uses: actions/upload-artifact@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Generate GitLights dashboard
+        id: gitlights
+        uses: gitlights-app/analytics-gitlights-action@1.2.1
         with:
-          name: gitlights-dashboard
-          path: |
-            images/all_in_one.png
-            dashboard_url.txt
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          run_id: ${{ github.run_id }}
+        
+      - name: Save Dashboard URL to File
+        if: success()
+        run: |
+          mkdir -p ./artifacts
+          echo "${{ steps.gitlights.outputs.image_url }}" > ./artifacts/dashboard_url.txt
+      
+      - name: Upload Dashboard URL
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitlights-dashboard-url
+          path: ./artifacts/dashboard_url.txt
+          retention-days: 5
+          if-no-files-found: error
 ```
 
 ---
@@ -77,8 +91,8 @@ After the first workflow run:
 2. Open the latest run of the dashboard workflow
 3. Navigate to the **Summary** tab of the workflow page
 4. Look for the **Artifacts** section at the bottom of the summary
-5. Download the file named `dashboard_url.txt`
-6. Open the file and copy the image URL
+5. Download the file named `gitlights-dashboard-url`
+6. Extract and open the `dashboard_url.txt` file inside and copy the image URL
 
 ---
 

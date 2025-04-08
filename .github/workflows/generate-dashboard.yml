@@ -15,7 +15,7 @@ jobs:
         
       - name: Generate GitLights dashboard
         id: gitlights
-        uses: gitlights-app/analytics-gitlights-action@1.2.1
+        uses: gitlights-app/analytics-gitlights-action@1.2.2
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
@@ -31,13 +31,8 @@ jobs:
       - name: Save Dashboard URL to File
         if: success()
         run: |
-          # Create output directory if it doesn't exist
           mkdir -p ./artifacts
-          # Save the URL to a file in the artifacts directory
           echo "${{ steps.gitlights.outputs.image_url }}" > ./artifacts/dashboard_url.txt
-          # Verify file was created successfully
-          ls -la ./artifacts/
-          echo "Dashboard URL saved to ./artifacts/dashboard_url.txt"
       
       # Upload only the URL text file as an artifact
       - name: Upload Dashboard URL
